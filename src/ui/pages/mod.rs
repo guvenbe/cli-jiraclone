@@ -67,7 +67,14 @@ impl Page for EpicDetial {
     }
 
     fn handle_input(&self, input: &str) -> Result<Option<Action>> {
-        todo!()
+        match input {
+            "p" => Ok(Some(Action::NavigateToPreviousPage)),
+            "u" => Ok(Some(Action::UpdateStoryStatus {story_id: self.story_id})),
+            "d" => Ok(Some(Action::DeleteStory {epic_id:self.epic_id, story_id: self.story_id})),
+            _ =>{
+                Ok(None)
+            }
+        }
     }
 }
 
