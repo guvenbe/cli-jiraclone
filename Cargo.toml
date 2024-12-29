@@ -6,6 +6,9 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.94"
 serde = { version = "1.0.216", features = ["derive"] }
+serde_json = "1.0.134"
+ellipse = "0.2.0"
+itertools = "0.13.0"
 
 [dev-dependencies]
 tempfile = "3.14.0"
