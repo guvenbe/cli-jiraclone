@@ -82,5 +82,5 @@ impl Story {
 pub struct DBState {
     pub last_item_id: u32,
     pub epics: HashMap<u32, Epic>,
-    pub stories: HashMap<u32, Story>
+    pub stories: HashMap<u32, Story>,
 }

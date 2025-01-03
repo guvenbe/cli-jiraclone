@@ -61,7 +61,7 @@ impl Page for HomePage {
     }
 
     fn as_any(&self) -> &dyn Any {
-       self
+        self
     }
 }
 
@@ -140,7 +140,7 @@ impl Page for EpicDetail {
     }
 
     fn as_any(&self) -> &dyn Any {
-        todo!()
+        self
     }
 }
 
@@ -189,7 +189,7 @@ impl Page for StoryDetail {
     }
 
     fn as_any(&self) -> &dyn Any {
-        todo!()
+        self
     }
 }
 
