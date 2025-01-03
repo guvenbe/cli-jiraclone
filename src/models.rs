@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, fmt::Display};
 
 #[derive(Debug, PartialEq, Eq)]
@@ -20,7 +20,7 @@ pub enum Status {
     Open,
     InProgress,
     Resolved,
-    Closed
+    Closed,
 }
 
 impl Display for Status {
@@ -56,7 +56,7 @@ impl Epic {
             name,
             description,
             status: Status::Open,
-            stories: vec![]
+            stories: vec![],
         }
     }
 }

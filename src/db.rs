@@ -1,5 +1,4 @@
 use std::fs;
-use std::panic::set_hook;
 use anyhow::{anyhow, Result};
 
 use crate::models::{DBState, Epic, Story, Status};
@@ -40,7 +39,12 @@ impl JiraDatabase {
 
         parsed.last_item_id = new_id;
         parsed.stories.insert(new_id, story);
-        parsed.epics.get_mut(&epic_id).ok_or_else(|| anyhow!("could not find epic in database!"))?.stories.push(new_id);
+        parsed
+            .epics
+            .get_mut(&epic_id)
+            .ok_or_else(|| anyhow!("could not find epic in database!"))?
+            .stories
+            .push(new_id);
 
         self.database.write_db(&parsed)?;
         Ok(new_id)
@@ -76,7 +80,11 @@ impl JiraDatabase {
     pub fn update_epic_status(&self, epic_id: u32, status: Status) -> Result<()> {
         let mut parsed = self.database.read_db()?;
 
-        parsed.epics.get_mut(&epic_id).ok_or_else(|| anyhow!("could not find epic in database!"))?.status = status;
+        parsed
+            .epics
+            .get_mut(&epic_id)
+            .ok_or_else(|| anyhow!("could not find epic in database!"))?
+            .status = status;
 
         self.database.write_db(&parsed)?;
         Ok(())
@@ -85,7 +93,11 @@ impl JiraDatabase {
     pub fn update_story_status(&self, story_id: u32, status: Status) -> Result<()> {
         let mut parsed = self.database.read_db()?;
 
-        parsed.stories.get_mut(&story_id).ok_or_else(|| anyhow!("could not find story in database!"))?.status = status;
+        parsed
+            .stories
+            .get_mut(&story_id)
+            .ok_or_else(|| anyhow!("could not find story in database!"))?
+            .status = status;
 
         self.database.write_db(&parsed)?;
         Ok(())
@@ -108,7 +120,7 @@ impl Database for JSONFileDatabase {
         Ok(parsed)
     }
 
-   /*
+    /*
     fs::write(&amp;self.file_path, &amp;serde_json::to_vec(db_state)?)? is the main operation of
     this method. It writes the serialized byte vector to a file.
     The path to the file is specified by self.file_path, which is assumed to be a field
@@ -128,12 +140,18 @@ pub mod test_utils {
     use super::*;
 
     pub struct MockDB {
-        last_written_state: RefCell<DBState>
+        last_written_state: RefCell<DBState>,
     }
 
     impl MockDB {
         pub fn new() -> Self {
-            Self { last_written_state: RefCell::new(DBState { last_item_id: 0, epics: HashMap::new(), stories: HashMap::new() }) }
+            Self {
+                last_written_state: RefCell::new(DBState {
+                    last_item_id: 0,
+                    epics: HashMap::new(),
+                    stories: HashMap::new(),
+                }),
+            }
         }
     }
 
@@ -158,7 +176,9 @@ mod tests {
 
     #[test]
     fn create_epic_should_work() {
-        let db = JiraDatabase { database: Box::new(MockDB::new()) };
+        let db = JiraDatabase {
+            database: Box::new(MockDB::new()),
+        };
         let epic = Epic::new("".to_owned(), "".to_owned());
 
         let result = db.create_epic(epic.clone());
@@ -207,7 +227,10 @@ mod tests {
 
         assert_eq!(id, expected_id);
         assert_eq!(db_state.last_item_id, expected_id);
-        assert_eq!(db_state.epics.get(&epic_id).unwrap().stories.contains(&id), true);
+        assert_eq!(
+            db_state.epics.get(&epic_id).unwrap().stories.contains(&id),
+            true
+        );
         assert_eq!(db_state.stories.get(&id), Some(&story));
     }
 
